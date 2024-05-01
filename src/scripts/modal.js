@@ -1,4 +1,4 @@
-export { openPopup, closePopup, setCloseModal};
+export { openPopup, closePopup, setCloseModalByClickListeners};
 
 function openPopup(popup) {
     popup.classList.add("popup_is-opened");
@@ -24,7 +24,7 @@ function removeEscapeClose() {
     document.removeEventListener("keydown", handleClosePopupEscape);
 }
 
-function setCloseModal(popupList) {
+function setCloseModalByClickListeners(popupList) {
     popupList.forEach(popup => {
         const closeButton = popup.querySelector(".popup__close");
         closeButton.addEventListener('click', (evt) => {
