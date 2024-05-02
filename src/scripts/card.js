@@ -5,7 +5,6 @@ function createCard(card, deleteCard, likeCard, openImagePopup) {
   const cardDelete = cardElement.querySelector(".card__delete-button");
   const cardImage = cardElement.querySelector(".card__image");
   const buttonLike = cardElement.querySelector(".card__like-button");
-  const popupCardWindow = document.querySelector(".popup_type_image");
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardElement.querySelector(".card__title").textContent = card.name;

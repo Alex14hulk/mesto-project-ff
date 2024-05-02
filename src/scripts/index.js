@@ -46,6 +46,8 @@ formEditProfile.addEventListener('submit', handleEditProfileFormSubmit);
 
 setCloseModalByClickListeners(popupList);
 
+popupList.forEach((card) => card.classList.add("popup_is-animated"));
+
 function fillEditProfileForm() {
   nameProfileInput.value = profileTitle.textContent;
   jobProfileInput.value = profileDescription.textContent;
@@ -63,8 +65,8 @@ addButton.addEventListener("click", function() {
 function handleFormAddNewCardSubmit(evt) {
   evt.preventDefault();
   const card = {
-    name: evt.target.inputNewPlaceName.value,
-    link: evt.target.inputNewPlaceLink.value
+    name: inputNewPlaceName.value,
+    link: inputNewPlaceLink.value
   };
   cardsContainer.prepend(createCard(card, deleteCard, likeCard, openImagePopup));
   formNewPlace.reset();
