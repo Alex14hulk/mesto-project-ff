@@ -46,8 +46,6 @@ formEditProfile.addEventListener('submit', handleEditProfileFormSubmit);
 
 setCloseModalByClickListeners(popupList);
 
-popupList.forEach((card) => card.classList.add("popup_is-animated"));
-
 function fillEditProfileForm() {
   nameProfileInput.value = profileTitle.textContent;
   jobProfileInput.value = profileDescription.textContent;

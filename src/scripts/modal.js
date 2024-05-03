@@ -32,11 +32,11 @@ function setCloseModalByClickListeners(popupList) {
             closePopup(popup);
         });
 
-    popup.addEventListener('click', (evt) => {
-        if (evt.target.classList.contains("popup_is-opened")) {
-            closePopup(popup);
-        }
-    })
+        popup.addEventListener('click', (evt) => {
+            if (evt.target.classList.contains("popup_is-opened")) {
+                closePopup(popup);
+            }
+        })
     });
 }
 
