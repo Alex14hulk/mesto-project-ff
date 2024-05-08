@@ -10,6 +10,10 @@ import { createCard, deleteCard, likeCard } from './card';
 
 import { initialCards } from './cards.js';
 
+import {clearValidation, enableValidation, validationSettings } from "./validation.js";
+
+import {changeAvatarApi} from "./api.js";
+
 const cardsContainer = document.querySelector('.places__list');
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const popupEditProfile = document.querySelector(".popup_type_edit");
@@ -27,6 +31,9 @@ const formNewPlace = document.forms["new-place"];
 const inputNewPlaceName = formNewPlace.elements["place-name"];
 const inputNewPlaceLink = formNewPlace.elements["link"];
 const popupList = Array.from(document.querySelectorAll(".popup"));
+const avatar = document.querySelector(".profile__image");
+const changeAvatar = document.querySelector(".popup_type_change-avatar");
+const newAvatarLink = document.querySelector("#avatar-input");
 
 
 initialCards.forEach((card) => {
@@ -54,10 +61,12 @@ function fillEditProfileForm() {
 buttonEditProfile.addEventListener("click", function() {
   fillEditProfileForm();
   openPopup(popupEditProfile);
+  clearValidation(formEditProfile, validationSettings);
 })
 
 addButton.addEventListener("click", function() {
   openPopup(popupNewCard);
+  clearValidation(formNewPlace, validationSettings);
 });
 
 function handleFormAddNewCardSubmit(evt) {
@@ -85,3 +94,26 @@ function openImagePopup(evt) {
   fillImagePopup(evt.target);
   openPopup(popupCardWindow);
 }
+
+changeAvatar.addEventListener("submit", changeAvatar);
+
+function changeAvatarLoc(avatarLink) {
+  avatar.style.backgroundImage = `url(${avatarLink})`;
+}
+
+function changeAvatar(evt) {
+  evt.preventDefault();
+
+  const newAvatar = newAvatarLink.value;
+
+  changeAvatarApi(newAvatar);
+  .then((res) => {
+    changeAvatarLoc(res.avatar);
+    closePopup(changeAvatar);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+}
+
+enableValidation(validationSettings);
