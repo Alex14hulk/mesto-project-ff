@@ -8,8 +8,6 @@ import {
 
 import { createCard, deleteCard, likeCard } from './card';
 
-import { initialCards } from './cards.js';
-
 import {clearValidation, enableValidation } from "./validation.js";
 
 import {validationSettings} from "./validationSettings.js";
@@ -19,6 +17,8 @@ import {getInfoApi, getCardsApi, editProfileApi, addCardApi, changeAvatarApi} fr
 const cardsContainer = document.querySelector('.places__list');
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const popupEditProfile = document.querySelector(".popup_type_edit");
+const typeCardName = popupNewCard.querySelector(".popup__input_type_card-name");
+const typeCardLink = popupNewCard.querySelector(".popup__input_type_url");
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const formEditProfile = document.forms["edit-profile"];
@@ -34,7 +34,7 @@ const inputNewPlaceName = formNewPlace.elements["place-name"];
 const inputNewPlaceLink = formNewPlace.elements["link"];
 const popupList = Array.from(document.querySelectorAll(".popup"));
 const avatar = document.querySelector(".profile__image");
-const PopupChangeAvatar = document.querySelector(".popup_type_change-avatar");
+const popupChangeAvatar = document.querySelector(".popup_type_change-avatar");
 const newAvatarLink = document.querySelector("#avatar-input");
 
 
@@ -49,8 +49,15 @@ function showCard(card, deleteCard, likeCard, openImagePopup, userInfo) {
   cardsContainer.append(cardElement);
 }
 
+function getProfileInfo(userInfo) {
+  profileTitle.textContent = userInfo.name;
+  profileDescription.textContent = userInfo.about;
+  avatar.style.backgroundImage = `url(${userInfo.avatar})`;
+}
+
 Promise.all([getInfoApi(), getCardsApi()])
-  .then(() => {
+  .then(([userInfo, initialCards]) => {
+    getProfileInfo(userInfo);
     initialCards.forEach((card) =>
     showCard(card, deleteCard, likeCard, openImagePopup, userInfo)
     );
@@ -61,16 +68,22 @@ Promise.all([getInfoApi(), getCardsApi()])
 
 function handleEditProfileFormSubmit(evt) {
     evt.preventDefault();
-    profileTitle.textContent = nameProfileInput.value;
-    profileDescription.textContent = jobProfileInput.value;
+    evt.submitter.textContent = "Сохранение...";
+    
+    const newName = inputNewPlaceName.value;
+    const newAbout = inputNewPlaceLink.value;
 
-    editProfileApi()
-      .then(() => {
+    editProfileApi(newName, newAbout)
+      .then((userInfo) => {
+        getProfileInfo(userInfo);
         closePopup(popupEditProfile);
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        evt.submitter.textContent = "Сохранение...";
+      })
 }
 
 formEditProfile.addEventListener('submit', handleEditProfileFormSubmit); 
@@ -95,24 +108,30 @@ addButton.addEventListener("click", function() {
 
 function handleFormAddNewCardSubmit(evt) {
   evt.preventDefault();
-  const card = {
-    name: inputNewPlaceName.value,
-    link: inputNewPlaceLink.value
+  evt.submitter.textContent = "Сохранение...";
+  
+  const newCard = {
+    name: typeCardName.value,
+    link: typeCardLink.value,
   };
-  cardsContainer.prepend(createCard(card, deleteCard, likeCard, openImagePopup));
-  formNewPlace.reset();
-  closePopup(popupNewCard);
 
-
-  addCardApi()
-      .then(() => {
-        cardsContainer.prepend(createCard(card, deleteCard, likeCard, openImagePopup));
-        formNewPlace.reset();
+  addCardApi(newCard.name, newCard.link)
+      .then((res) => {
         closePopup(popupNewCard);
+        newCard.reset();
+        return res;
+      })
+      .then((newCardData) => {
+        const newCardElement = createCard(newCardData, deleteCard, likeCard, openImagePopup, newCardData.owner._id);
+        const firstCard = cardList.firstChild;
+        cardList.insertBefore(newCardElement, firstCard);
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        evt.submitter.textContent = "Сохранение...";
+      })
 }
 
 formNewPlace.addEventListener("submit", handleFormAddNewCardSubmit);

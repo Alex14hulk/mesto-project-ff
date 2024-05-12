@@ -5,17 +5,17 @@ const showInputError = (formElement, inputElement, errorMessage, validationSetti
     inputElement.classList.add(validationSettings.inputErrorClass);
     errorElement.textContent = errorMessage;
     errorElementElement.classList.add(validationSettings.errorClass);
-}
+};
 
 
 const hideInputError = (formElement, inputElement, validationSettings) => {
-    errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.remove(validationSettings.inputErrorClass);
     errorElement.classList.remove(validationSettings.errorClass);
     errorElement.textContent = "";
 };
 
-const isValid = () => {
+const isValid = (formElement, inputElement, validationSettings) => {
     if (inputElement.validity.patternMismatch) {
         inputElement.setCustomValidity(inputElement.dataset.errorMessage);
     } 
@@ -48,9 +48,11 @@ function hasInvalidInput(inputList) {
 
 function toggleButtonState(inputList, buttonElement, validationSettings) {
     if (hasInvalidInput(inputList)) {
+        buttonElement.disabled = true;
         buttonElement.classList.add(validationSettings.inactiveButtonClass);
     } 
     else {
+        buttonElement.disabled = false;
         buttonElement.classList.remove(validationSettings.inactiveButtonClass);
     }
 }
