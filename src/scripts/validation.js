@@ -1,11 +1,4 @@
-const validationSettings = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input-error',
-    errorClass: 'popup__error_visible'
-  }; 
+import {validationSettings} from "./validationSettings.js";
 
 const showInputError = (formElement, inputElement, errorMessage, validationSettings) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
@@ -50,7 +43,7 @@ function setEventListeners(formElement, validationSettings) {
 }
   
 function hasInvalidInput(inputList) {
-    return inputList.some((inputElement => !inputElement.validity.valid);
+    return inputList.some((inputElement => !inputElement.validity.valid));
 }
 
 function toggleButtonState(inputList, buttonElement, validationSettings) {
@@ -75,7 +68,8 @@ function clearValidation(formElement, validationSettings) {
     const buttonElement = formElement.querySelector(validationSettings.submitButtonSelector);
 
     inputs.forEach(input => hideInputError(formElement, input, validationSettings));
+    formElement.reset();
     toggleButtonState(inputs, buttonElement, validationSettings);
 }
 
-export {clearValidation, enableValidation, validationSettings};
+export {clearValidation, enableValidation};
