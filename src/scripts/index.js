@@ -17,6 +17,7 @@ import {getInfoApi, getCardsApi, editProfileApi, addCardApi, changeAvatarApi} fr
 const cardsContainer = document.querySelector('.places__list');
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const popupEditProfile = document.querySelector(".popup_type_edit");
+const popupNewCard = document.querySelector(".popup_type_new-card");
 const typeCardName = popupNewCard.querySelector(".popup__input_type_card-name");
 const typeCardLink = popupNewCard.querySelector(".popup__input_type_url");
 const profileTitle = document.querySelector(".profile__title");
@@ -25,7 +26,6 @@ const formEditProfile = document.forms["edit-profile"];
 const nameProfileInput = formEditProfile.elements.name;
 const jobProfileInput = formEditProfile.elements.description;
 const addButton = document.querySelector(".profile__add-button");
-const popupNewCard = document.querySelector(".popup_type_new-card");
 const popupCardWindow = document.querySelector(".popup_type_image");
 const popupCardImage = document.querySelector(".popup__image");
 const popupCardCaption = document.querySelector(".popup__caption");
@@ -41,10 +41,6 @@ const newAvatarLink = document.querySelector("#avatar-input");
 function showCard(card, deleteCard, likeCard, openImagePopup, userInfo) {
   const userId = userInfo._id;
   const cardElement = createCard(card, deleteCard, likeCard, openImagePopup, userId);
-  if (card.likes.some((like) => like.id === userId)) {
-    const buttonLike = cardElement.querySelector(".card__like-button");
-    buttonLike.classList.add("card__like-button_is-active");
-  } 
 
   cardsContainer.append(cardElement);
 }
